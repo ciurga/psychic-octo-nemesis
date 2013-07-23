@@ -41,7 +41,7 @@ public class Review {
 
 
 	public Review() {
-		this.beer_name = "";
+		this.beer_name = "cacca";
 		this.beer_beerId = -1;
 		this.beer_brewerId = -1;
 		this.beer_ABV = -1;

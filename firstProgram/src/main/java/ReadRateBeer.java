@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.lang.Object;
+import java.lang.reflect.Field;
 
 
 public class ReadRateBeer {
@@ -12,7 +14,6 @@ public class ReadRateBeer {
 	public static void main(String[] args) {
 		int count = 0;
 		ArrayList<Review> reviews = new ArrayList<Review>();
-		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(pathname));
 			String line = reader.readLine();
@@ -22,17 +23,34 @@ public class ReadRateBeer {
 				parser(line,reviews);
 				reviews.add(new Review());
 				indexReview++;
-				System.out.println(reviews.get(indexReview).getBeer_beerId());
+				//System.out.println(reviews.get(indexReview).getBeer_beerId());
 				line = reader.readLine();
+				Object o = reviews.get(indexReview);
+				Class<?> c = o.getClass();
+				Field f = c.getDeclaredField("beer_name");
+				f.setAccessible(true);
+				System.out.println((String) f.get(o)+" prova ");
+				f.set(o, "some-new-value-for-field-f-in-o");
 				
 			}
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Can't open the file: "+e.getMessage());	
-		} catch (IOException e) {
+		} /*catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("File open. I can't read: "+e.getMessage());	
-		}
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 	}
 
 	private static void parser(String line, ArrayList<Review> reviews) {
